@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="view_picking_form_inherit">
+            <field name="name">view_picking_form_inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="id" invisible="1"/>
+                    <field name="product_imported" invisible="1"/>
+                </xpath>
+                <xpath expr="//header" position="inside">
+                    <button name="%(ahcec_stock_picking_import.ahcec_import_inventory_action)d" type="action"
+                            string="Import Receipts(AWB)"
+                            attrs="{'invisible':[('product_imported','!=',False),('picking_type_code', '!=', 'incoming')]}" context="{'picking_id': id}"/>
+                </xpath>
+                <xpath expr="//notebook/page[last()-3]" position="before">
+                    <page string="Receipts" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}">
+                        <field name="dummy_move_line">
+                            <tree editable="bottom">
+                                <field name="picking_id" invisible="1"/>
+                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="qty"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
